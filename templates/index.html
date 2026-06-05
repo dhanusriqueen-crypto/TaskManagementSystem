@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-image: url("/static/img.jpg");
+            background-size:cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .box {
+            background:linear-gradient(230,243,255,0.9);
+            backdrop-filter: blur(5px);
+            width: 500px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border:1px solid blueviolet;
+            border-radius:5px;
+        }
+
+        button {
+            padding: 6px 10px;
+            margin: 3px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .all-btn {
+    background: red;
+    color: white;
+    font-weight: bold;
+}
+
+.pending-btn {
+    background: gold;
+    color: black;
+    font-weight: bold;
+}
+
+.completed-btn {
+    background: green;
+    color: white;
+    font-weight: bold;
+}
+
+        .add-btn {
+            background: green;
+            color: white;
+        }
+
+        .done-btn {
+            background: orange;
+            color: white;
+        }
+
+        .edit-btn {
+            background: blue;
+            color: white;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+        }
+
+        .filter-btn {
+            background: #555;
+            color: white;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #eee;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: green;
+        }
+        h1{
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right,#2563eb,#06b6d4);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:
+                -1px -1px 0 black,
+                  1px -1px 0 black,
+                  -1px -1px 0 black,
+                  1px -1px 0 black;
+    border-bottom: 3px solid #60a5fa;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+li{
+    transition:0.3s;
+
+}
+
+li:hover{
+    transform:scale(1.02);
+}
+
+
+button:hover{
+    transform:scale(1.05);
+    color: greenyellow;
+}
+.task-text{
+    font-size: 20px;
+    font-weight: bold;
+    color:#111111;
+    letter-spacing: 1px;
+    font-family: 'Courier New', Courier, monospace;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>Task Manager</h1>
+
+    <!-- 🔍 FILTER BUTTONS -->
+<div style="margin-bottom: 15px;">
+    <a href="/?filter=all">
+        <button class="all-btn">All</button>
+    </a>
+
+    <a href="/?filter=pending">
+        <button class="pending-btn">Pending</button>
+    </a>
+
+    <a href="/?filter=completed">
+        <button class="completed-btn">Completed</button>
+    </a>
+</div>
+    <!-- ➕ ADD TASK -->
+    <form action="/add" method="POST">
+        <input type="text" name="task" placeholder="Enter task" required>
+        <br>
+        <button class="add-btn">Add Task</button>
+    </form>
+
+    <hr>
+
+    <p>Total Tasks: {{ tasks|length }}</p>
+
+    <h3>Tasks</h3>
+
+    <!-- 📋 TASK LIST -->
+    <ul>
+        {% for task in tasks %}
+        <li type="square">
+
+            <!-- TASK NAME -->
+            <span class="task-text">
+    {% if task[2] == 1 %}
+        ✅ {{ task[1] }}
+    {% else %}
+        📝 {{ task[1] }}
+    {% endif %}
+</span>
+
+            <div style="float:right;">
+
+                <!-- DONE BUTTON -->
+                {% if task[2] == 0 %}
+                <a href="/complete/{{ task[0] }}">
+                    <button class="done-btn">Done</button>
+                </a>
+                {% endif %}
+
+                <!-- EDIT -->
+                <a href="/edit/{{ task[0] }}">
+                    <button class="edit-btn">Edit</button>
+                </a>
+
+                <!-- DELETE -->
+                <a href="/delete/{{ task[0] }}">
+                    <button class="delete-btn">Delete</button>
+                </a>
+
+            </div>
+
+        </li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+</body>
+</html>
